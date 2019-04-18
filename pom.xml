@@ -62,7 +62,7 @@
         <url>http://10.0.2.6:8081/artifactory/devopsapp-snapshot</url> -->
         <id>lothaire.nexus</id>
         <name>nexus de lothaire</name>
-        <url>http://192.168.100.74/repository/maven-snapshots</url>
+        <url>http://192.168.100.74:8081/repository/maven-snapshots</url>
     </snapshotRepository>
         <repository>
         <id>central</id>
