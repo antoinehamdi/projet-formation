@@ -67,7 +67,8 @@
         <repository>
         <id>central</id>
         <name>devops-app-01-releases</name>
-        <url>http://10.0.2.6:8081/artifactory/devopsapp-releases</url>
+        <url>http://192.168.100.74:8081/repository/maven-releases</url>
+       <!-- <url>http://10.0.2.6:8081/artifactory/devopsapp-releases</url>-->
     </repository>
 </distributionManagement>
 
