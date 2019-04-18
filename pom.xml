@@ -278,5 +278,10 @@
   <prerequisites>
     <maven>3.0.3</maven>
   </prerequisites>
+<scm>
+   <connection>scm:git:https://github.com/antoinehamdi/projet-formation.git</connection>
+   <url>http://github.com/antoinehamdi/projet-formation</url>
+   <developerConnection>scm:git:https://github.com/antoinehamdi/projet-formation.git</developerConnection>
+</scm>
 
 </project>
