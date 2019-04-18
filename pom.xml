@@ -56,10 +56,13 @@
   </reporting>
 
 <distributionManagement>
-    <snapshotRepository>
+    <snapshotRepository><!--
         <id>snapshots</id>
         <name>devops-app-01-snapshots</name>
-        <url>http://10.0.2.6:8081/artifactory/devopsapp-snapshot</url>
+        <url>http://10.0.2.6:8081/artifactory/devopsapp-snapshot</url> -->
+        <id>lothaire.nexus</id>
+        <name>nexus de lothaire</name>
+        <url>http://192.168.100.74/repository/maven-snapshots</url>
     </snapshotRepository>
         <repository>
         <id>central</id>
