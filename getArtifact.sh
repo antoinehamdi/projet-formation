@@ -43,6 +43,11 @@ if [[ -z "$DL_URL" ]]; then
 	exit 1001
 fi
 
+ssh root@$MACHINE_HOTE "[[ ! -d "/data" ]] && mkdir /data"
+# Vérifie la présence d'un dossier /data, et dans le cas contraire, le crée
+ssh root@$MACHINE_HOTE "[[ ! -d "/data/projet" ]] && mkdir /data/projet"
+# De même pour /data/projet
 
 # Récupération du fichier demandé grâce à l'URL dans le dossier /data/projet
 scp  /tmp/$FILE_NAME root@$MACHINE_HOTE:/data/projet
+rm -rf /tmp/$FILE_NAME
