@@ -1,5 +1,6 @@
- #wget http://192.168.100.74:8081/repository/maven-central/org/codehaus/plexus/plexus-interpolation/1.14/plexus-interpolation-1.14.pom.sha1
+#!/bin/bash
 
+#Stocke dans des variables les ressources redondantes pour mieux les réutiliser.
 NEXUS_URL=192.168.100.74
 NEXUS_PORT=8081
 SNAPSHOT_REPOSITORY=maven-snapshots
@@ -9,34 +10,41 @@ NEXUS_PWD=admin123
 NEXUS_AUTH=$NEXUS_LOGIN:$NEXUS_PWD
 NEXUS_SOCKET=$NEXUS_URL:$NEXUS_PORT
 MAVEN_DATA_URL=$NEXUS_SOCKET/repository/maven-snapshots/com/lesformateurs/maven-project/server/$1/maven-metadata.xml
-# Vérification du type de l'artifact passé en argument.
 
+
+# Vérification du type de l'artifact passé en argument.
 if [[ $1 == *"-SNAPSHOT" ]]; then
 # version SNAPSHOT.
+# Récupération du dernier snapshot dans le fichier maven-metadata.xml.
 LATEST_SNAP=$(curl -X GET $MAVEN_DATA_URL | grep value | head -n 1 | grep -Po "[0-9-.]*")
+# Requete pour lister tout les snapshots correspondant a la version demandée.
 API_SNAPSHOT_INFO="${NEXUS_SOCKET}/service/rest/v1/search/assets?repository=${SNAPSHOT_REPOSITORY}&name=server&maven.extension=jar&maven.baseVersion=$1"
+# Execution de la requete avec l'API REST de Nexus.
 INFO_SNAPSHOT=$(curl -u ${NEXUS_AUTH} -X GET $API_SNAPSHOT_INFO)
+# A partir des données récupérées précédemment, on affine pour ne recupérer que l'URL de téléchargement.
 DL_URL=$(echo "$INFO_SNAPSHOT" | grep -Po "http://[0-9a-zA-Z.:/-]*" | grep "$LATEST_SNAP\.jar")
 else
 # defaut = version RELEASE.
+# Requete pour lister toutes les releases correspondant a la version demandée.
 API_RELEASE_INFO="${NEXUS_SOCKET}/service/rest/v1/search/assets?repository=${RELEASE_REPOSITORY}&name=server&maven.extension=jar&version=$1"
+# Execution de la requete avec l'API REST de Nexus.
 INFO_RELEASE=$(curl -u ${NEXUS_AUTH} -X GET $API_RELEASE_INFO)
+# A partir des données récupérées précédemment, on affine pour ne recupérer que l'URL de téléchargement.
 DL_URL=$(echo "$INFO_RELEASE" | grep -Po "http://[0-9a-zA-Z.:/-]*" | grep "$1\.jar")
-
 fi
 
-echo $DL_URL
+# Si l'URL est vide (et donc non récupérée), renvoie un message et quitte le script.
 if [[ -z "$DL_URL" ]]; then
 	echo "Version non trouvée sur Nexus"
 	exit 1001
 fi
-	
+# Vérifie la présence d'un dossier /data, et dans le cas contraire, le crée
 if [[ ! -d "/data" ]]; then
 	mkdir "/data"
 fi
-
+# De même pour /data/projet
 if [[ ! -d "/data/projet" ]]; then
 	mkdir "/data/projet"
 fi
-
+# Récupération du fichier demandé grâce à l'URL dans le dossier /data/projet
 wget -P /data/projet $DL_URL
