@@ -45,4 +45,4 @@ fi
 
 
 # Récupération du fichier demandé grâce à l'URL dans le dossier /data/projet
-scp  /tmp/$FILE_NAME $MACHINE_HOTE:/data/projet
+scp  /tmp/$FILE_NAME root@$MACHINE_HOTE:/data/projet
