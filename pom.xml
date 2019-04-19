@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.lesformateurs.maven-project</groupId>
   <artifactId>devopsapp</artifactId>
   <packaging>pom</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>DevOps App</name>
   <description>Application DevOps App developpe par LesFormateurs.</description>
   <url>http://www.lesformateurs.com</url>
@@ -282,6 +281,7 @@
    <connection>scm:git:https://github.com/antoinehamdi/projet-formation.git</connection>
    <url>http://github.com/antoinehamdi/projet-formation</url>
    <developerConnection>scm:git:https://github.com/antoinehamdi/projet-formation.git</developerConnection>
-</scm>
+  <tag>devopsapp-1.0</tag>
+  </scm>
 
 </project>
