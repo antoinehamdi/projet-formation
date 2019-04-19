@@ -280,8 +280,7 @@
 <scm>
    <connection>scm:git:https://github.com/antoinehamdi/projet-formation.git</connection>
    <url>http://github.com/antoinehamdi/projet-formation</url>
-   <developerConnection>scm:git:https://github.com/antoinehamdi/projet-formation.git</developerConnection>
-  <tag>HEAD</tag>
-  </scm>
+   <tag>HEAD</tag>
+</scm>
 
 </project>
