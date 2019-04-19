@@ -10,7 +10,7 @@ NEXUS_PWD=admin123
 NEXUS_AUTH=$NEXUS_LOGIN:$NEXUS_PWD
 NEXUS_SOCKET=$NEXUS_URL:$NEXUS_PORT
 MAVEN_DATA_URL=$NEXUS_SOCKET/repository/maven-snapshots/com/lesformateurs/maven-project/server/$1/maven-metadata.xml
-
+MACHINE_HOTE=192.168.100.128
 
 # Vérification du type de l'artifact passé en argument.
 if [[ $1 == *"-SNAPSHOT" ]]; then
@@ -23,6 +23,7 @@ API_SNAPSHOT_INFO="${NEXUS_SOCKET}/service/rest/v1/search/assets?repository=${SN
 INFO_SNAPSHOT=$(curl -u ${NEXUS_AUTH} -X GET $API_SNAPSHOT_INFO)
 # A partir des données récupérées précédemment, on affine pour ne recupérer que l'URL de téléchargement.
 DL_URL=$(echo "$INFO_SNAPSHOT" | grep -Po "http://[0-9a-zA-Z.:/-]*" | grep "$LATEST_SNAP\.jar")
+FILE_NAME="server-$LATEST_SNAP.jar"
 else
 # defaut = version RELEASE.
 # Requete pour lister toutes les releases correspondant a la version demandée.
@@ -31,13 +32,18 @@ API_RELEASE_INFO="${NEXUS_SOCKET}/service/rest/v1/search/assets?repository=${REL
 INFO_RELEASE=$(curl -u ${NEXUS_AUTH} -X GET $API_RELEASE_INFO)
 # A partir des données récupérées précédemment, on affine pour ne recupérer que l'URL de téléchargement.
 DL_URL=$(echo "$INFO_RELEASE" | grep -Po "http://[0-9a-zA-Z.:/-]*" | grep "$1\.jar")
+FILE_NAME="server-$1.jar"
 fi
-
+echo $FILE_NAME
+echo $DL_URL
+wget -P "/tmp" $DL_URL
 # Si l'URL est vide (et donc non récupérée), renvoie un message et quitte le script.
-if [[ -z "$DL_URL" ]]; then
+if [[ -z "$DL_URL" ]]; then 
 	echo "Version non trouvée sur Nexus"
 	exit 1001
 fi
+
+ssh -T root@$MACHINE_HOTE <<"EOF"
 # Vérifie la présence d'un dossier /data, et dans le cas contraire, le crée
 if [[ ! -d "/data" ]]; then
 	mkdir "/data"
@@ -46,5 +52,6 @@ fi
 if [[ ! -d "/data/projet" ]]; then
 	mkdir "/data/projet"
 fi
+EOF
 # Récupération du fichier demandé grâce à l'URL dans le dossier /data/projet
-wget -P /data/projet $DL_URL
+scp  /tmp/$FILE_NAME $MACHINE_HOTE:/data/projet
